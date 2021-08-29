@@ -41,7 +41,6 @@ app.post('/addProducts', (req, res) => {
     productCollection
       .insertOne({ name, price, description, image })
       .then((result) => {
-          console.log(result);
         res.send(result.insertedCount > 0);
       });
   });
@@ -63,14 +62,20 @@ app.get('/product/:id', (req, res) => {
 })
 
 
-// order/////
+// order section/////
  app.post('/order', (req, res) => {
     const orders = req.body;
     orderCollection.insertOne(orders, (err, result) => {
-        console.log(err, result)
         res.send({ count: result.insertedCount });
     })
 })
+ 
+ app.get('./orders', (req, res) => {
+    orderCollection.find({})
+    .toArray((err, documents) => {
+      res.send(documents);
+    })
+ })
 
  app.get('/order/:email', (req, res) => {
      const email = req.params.email;
@@ -90,10 +95,9 @@ app.get('/product/:id', (req, res) => {
   })
 
 
-
+// Admin & artist
 app.post("/addArtist", (req, res) => {
   const file = req.files.file;
-  console.log(file)
   const name = req.body.name;
   const email = req.body.email;
   const position = req.body.position;
@@ -132,13 +136,7 @@ app.post("/addArtist", (req, res) => {
      res.send(artists.length > 0);
    });
  });
-
-
-
-
 });
-
-
 
 
   // Root API.....
